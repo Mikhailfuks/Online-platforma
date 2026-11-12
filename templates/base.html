@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}PyAcademy — Python для начинающих{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block page_styles %}{% endblock %}
+  <style>
+    .toast-notification {
+      position: fixed;
+      z-index: 1000;
+      right: 24px;
+      bottom: 24px;
+      max-width: min(360px, calc(100vw - 32px));
+      padding: 16px 20px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 12px;
+      color: #fff;
+      background: #172554;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, .24);
+      font-size: 14px;
+      line-height: 1.5;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity .3s ease, transform .3s ease;
+      pointer-events: none;
+    }
+    .toast-notification.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (max-width: 480px) {
+      .toast-notification {
+        right: 16px;
+        bottom: 16px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .toast-notification {
+        transition: none;
+      }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+</head>
+<body>
+  <nav>
+    <div class="container nav-inner">
+      <div class="nav-start">
+        <a href="{{ url_for('index') }}" class="logo">PyAcademy</a>
+        <div class="nav-links">
+          <a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}nav-current{% endif %}">Главная</a>
+          <a href="{{ url_for('courses') }}">Курсы</a>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="{{ url_for('sandbox') }}">Песочница</a>
+        <a href="{{ url_for('leaderboard') }}">Рейтинг</a>
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('wallet') }}">Кошелёк</a>
+          <a href="{{ url_for('profile') }}" class="account-link">
+            <span class="nav-avatar">{{ current_user.username[0]|upper }}</span>
+            <span>{{ current_user.username }}</span>
+          </a>
+          {% if current_user.is_admin %}
+            <a href="{{ url_for('admin') }}" style="color: #f59e0b; font-weight: bold;">Админка</a>
+          {% endif %}
+          <span class="user-badge">{{ current_user.username }} | {{ current_user.xp }} XP</span>
+          <a href="{{ url_for('logout') }}" class="btn-outline">Выйти</a>
+        {% else %}
+          <a href="{{ url_for('login') }}">Вход</a>
+          <a href="{{ url_for('register') }}" class="btn-primary-small">Регистрация</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    {% set flashed_messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in flashed_messages %}
+      {% if category != "push" %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endif %}
+    {% endfor %}
+    
+    {% block content %}{% endblock %}
+  </div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+  <script>
+    (() => {
+      const toast = document.createElement("div");
+      toast.className = "toast-notification";
+      toast.setAttribute("role", "status");
+      toast.setAttribute("aria-live", "polite");
+      document.body.appendChild(toast);
+
+      let hideTimer;
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add("is-visible");
+        window.clearTimeout(hideTimer);
+        hideTimer = window.setTimeout(() => {
+          toast.classList.remove("is-visible");
+        }, 5000);
+      };
+      const pushMessages = [
+        {% for category, message in flashed_messages if category == "push" %}
+          {{ message | tojson }}{% if not loop.last %},{% endif %}
+        {% endfor %}
+      ];
+      pushMessages.forEach((message, index) => {
+        window.setTimeout(() => showToast(message), index * 5200);
+      });
+    })();
+  </script>
+</body>
+</html>

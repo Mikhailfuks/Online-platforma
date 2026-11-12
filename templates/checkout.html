@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Оформление курса — PyAcademy{% endblock %}
+{% block page_styles %}<link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">{% endblock %}
+{% block content %}
+<main class="card-page narrow-card-page">
+  <a class="card-back" href="{{ url_for('courses') }}">← К списку курсов</a>
+  {% if enrolled %}
+    <section class="card-form-panel checkout-complete">
+      <span class="checkout-icon">✓</span>
+      <span class="eyebrow">Запись оформлена</span>
+      <h1>{{ course.title }}</h1>
+      <p>Курс уже добавлен в ваши записи.</p>
+      <a href="{{ url_for('index') }}#course" class="card-primary-action">Перейти к программе</a>
+    </section>
+  {% else %}
+    <section class="card-form-panel">
+      <span class="eyebrow">Оформление записи</span>
+      <h1>{{ course.title }}</h1>
+      <p>Выберите виртуальную карту. Сумма будет списана с её внутреннего баланса.</p>
+      <div class="checkout-summary">
+        <span>Стоимость курса</span>
+        <strong>{{ "{:,.2f}".format(course.price).replace(",", " ") }} ₽</strong>
+      </div>
+      {% if cards %}
+        <form method="post" action="{{ url_for('purchase_course', course_id=course.id) }}" class="balance-form">
+          <fieldset class="checkout-card-options">
+            <legend>Карта для оплаты</legend>
+            {% for card in cards %}
+              <label class="checkout-card-option">
+                <input type="radio" name="card_id" value="{{ card.id }}" {% if loop.first %}checked{% endif %} required>
+                <span>•••• {{ card.number[-4:] }}</span>
+                <strong>{{ "{:,.2f}".format(card.balance).replace(",", " ") }} ₽</strong>
+              </label>
+            {% endfor %}
+          </fieldset>
+          <button type="submit" class="card-primary-action">Записаться · {{ "{:,.2f}".format(course.price).replace(",", " ") }} ₽</button>
+        </form>
+      {% else %}
+        <p class="balance-notice">У вас пока нет активных карт.</p>
+      {% endif %}
+      <a href="{{ url_for('wallet') }}" class="card-subtle-link">Открыть кошелёк</a>
+    </section>
+  {% endif %}
+</main>
+{% endblock %}

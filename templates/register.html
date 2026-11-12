@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 400px; margin: 40px auto;">
+  <h2 style="text-align: center;">Регистрация</h2>
+  <form method="post">
+    <input name="username" placeholder="Логин (мин. 3 символа)" required style="margin-bottom: 15px;">
+    <input name="email" type="email" placeholder="Email" required style="margin-bottom: 15px;">
+    <input name="password" type="password" placeholder="Пароль (мин. 5 символов)" required style="margin-bottom: 15px;">
+    <button type="submit" style="width: 100%;">Создать аккаунт</button>
+  </form>
+  <p style="text-align: center; margin-top: 15px; font-size: 14px;">
+    Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a>
+  </p>
+</div>
+{% endblock %}

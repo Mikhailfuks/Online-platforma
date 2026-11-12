@@ -1,0 +1,216 @@
+.card-page {
+  max-width: 1040px;
+  margin: 32px auto 60px;
+  padding: 0 20px;
+}
+.narrow-card-page { max-width: 650px; }
+.card-page-heading, .wallet-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+}
+.card-page-heading { margin-bottom: 20px; }
+.card-back { display: block; margin-bottom: 16px; color: #64748b; font-size: 13px; text-decoration: none; }
+.card-back:hover, .card-subtle-link:hover { color: #4f46e5; }
+.card-page h1 { margin: 6px 0; font-size: 30px; letter-spacing: -.5px; }
+.card-page-heading p, .wallet-section-heading p { margin: 4px 0 0; color: #64748b; font-size: 14px; }
+.card-primary-action, .card-secondary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 10px 17px;
+  border: 0;
+  border-radius: 7px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.card-primary-action { color: #fff; background: #4f46e5; }
+.card-primary-action:hover { color: #fff; background: #4338ca; }
+.card-secondary-action { border: 1px solid #dbe2ef; color: #334155; background: #fff; }
+.card-secondary-action:hover { border-color: #a5b4fc; color: #4338ca; }
+.balance-notice {
+  margin: 18px 0;
+  padding: 14px 16px;
+  border: 1px solid #fde68a;
+  border-radius: 9px;
+  color: #854d0e;
+  background: #fffbeb;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.wallet-section { margin: 28px 0; }
+.wallet-section-heading { align-items: center; margin-bottom: 14px; }
+.wallet-section-heading h2 { margin: 0; font-size: 19px; }
+.wallet-section-heading p { font-size: 13px; }
+.demo-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 17px; }
+.demo-bank-card {
+  position: relative;
+  min-height: 254px;
+  overflow: hidden;
+  padding: 21px;
+  border-radius: 15px;
+  color: #fff;
+  background: linear-gradient(130deg, #1e293b, #334155 70%, #475569);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, .15);
+}
+.demo-bank-card-primary { outline: 3px solid #10b981; outline-offset: 2px; }
+.demo-card-topline, .demo-card-bottom { display: flex; justify-content: space-between; gap: 10px; }
+.demo-card-topline { color: #dbeafe; font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+.demo-card-chip { margin-top: 21px; color: #fde68a; font-size: 24px; }
+.demo-card-number { margin: 8px 0 10px; font-family: Consolas, monospace; font-size: 18px; letter-spacing: 1.2px; }
+.demo-card-bottom { color: #cbd5e1; font-size: 10px; text-transform: uppercase; }
+.demo-card-balance { margin-top: 5px; font-size: 23px; font-weight: 800; }
+.demo-card-badge { position: absolute; top: 53px; right: 20px; padding: 4px 9px; border-radius: 20px; background: #059669; font-size: 10px; font-weight: 700; }
+.demo-card-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.demo-card-actions form { margin: 0; }
+.card-small-button { min-height: 30px; padding: 6px 9px; border: 1px solid rgba(255,255,255,.25); color: #fff; background: rgba(255,255,255,.12); font-size: 11px; }
+.card-small-button:hover { background: rgba(255,255,255,.22); }
+.card-remove-button { color: #fecaca; }
+.demo-topup { display: grid; gap: 5px; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.16); }
+.demo-topup label { color: #cbd5e1; font-size: 11px; }
+.demo-topup > div { display: flex; gap: 8px; }
+.demo-topup input { min-width: 0; padding: 7px 9px; border: 0; font-size: 13px; }
+.demo-topup button { min-height: 34px; padding: 6px 10px; color: #0f172a; background: #fff; font-size: 12px; white-space: nowrap; }
+.demo-topup button:hover { background: #e2e8f0; }
+.card-empty-state { padding: 34px 20px; border: 1px dashed #cbd5e1; border-radius: 12px; background: #fff; text-align: center; }
+.card-empty-state > span { font-size: 32px; }
+.card-empty-state h3 { margin: 8px 0; font-size: 17px; }
+.card-empty-state p { margin: 6px auto 16px; max-width: 420px; color: #64748b; font-size: 13px; }
+.compact-empty { padding: 20px; color: #64748b; font-size: 13px; }
+.compact-empty p { margin-top: 0; }
+.transaction-list { overflow: hidden; border: 1px solid #e2e8f0; border-radius: 11px; background: #fff; }
+.transaction-row { display: flex; align-items: center; gap: 12px; padding: 13px 15px; border-bottom: 1px solid #eef2f7; }
+.transaction-row:last-child { border-bottom: 0; }
+.transaction-icon { display: inline-flex; width: 34px; height: 34px; flex: 0 0 34px; align-items: center; justify-content: center; border-radius: 50%; color: #4338ca; background: #eef2ff; font-weight: 800; }
+.transaction-description { display: grid; flex: 1; gap: 3px; min-width: 0; }
+.transaction-description strong { overflow-wrap: anywhere; font-size: 13px; }
+.transaction-description time { color: #94a3b8; font-size: 11px; }
+.transaction-amount { white-space: nowrap; font-size: 13px; }
+.transaction-positive { color: #059669; }
+.transaction-negative { color: #dc2626; }
+.card-form-panel { padding: 30px; border: 1px solid #e2e8f0; border-radius: 14px; background: #fff; box-shadow: 0 10px 25px rgba(15, 23, 42, .06); }
+.card-form-panel > p { color: #64748b; font-size: 14px; line-height: 1.65; }
+.balance-form { display: grid; gap: 11px; margin-top: 20px; }
+.balance-form label { font-size: 13px; font-weight: 700; }
+.balance-form select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 7px; color: #17243b; background: #fff; font: inherit; }
+.balance-form .card-primary-action { width: 100%; }
+.checkout-summary { display: flex; justify-content: space-between; gap: 15px; margin: 22px 0; padding: 16px; border: 1px solid #e2e8f0; border-radius: 9px; background: #f8fafc; font-size: 14px; }
+.checkout-summary strong { color: #4338ca; font-size: 17px; }
+.card-subtle-link { display: block; margin-top: 14px; color: #64748b; text-align: center; font-size: 13px; text-decoration: none; }
+.checkout-complete { text-align: center; }
+.checkout-icon { display: flex; width: 54px; height: 54px; align-items: center; justify-content: center; margin: 0 auto 17px; border-radius: 50%; color: #fff; background: #10b981; font-size: 26px; font-weight: 800; }
+.demo-receipt { padding: 34px; border: 1px solid #e2e8f0; border-top: 5px solid #4f46e5; border-radius: 12px; background: #fff; box-shadow: 0 10px 25px rgba(15, 23, 42, .06); }
+.receipt-brand { color: #4f46e5; font-size: 20px; font-weight: 800; }
+.receipt-brand span { margin-left: 5px; color: #94a3b8; font-size: 10px; letter-spacing: .12em; }
+.demo-receipt h1 { margin: 22px 0 5px; font-size: 24px; }
+.receipt-warning { margin: 0 0 23px; color: #b45309; font-size: 12px; }
+.receipt-row { display: flex; justify-content: space-between; gap: 15px; padding: 12px 0; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+.receipt-row span { color: #64748b; }
+.receipt-row strong { text-align: right; overflow-wrap: anywhere; }
+.receipt-total { margin-top: 6px; border-bottom: 0; font-size: 15px; }
+.receipt-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.receipt-actions > * { flex: 1; }
+.provider-balance-card { display: flex; align-items: center; justify-content: space-between; gap: 25px; padding: 24px; border-radius: 14px; color: #fff; background: linear-gradient(125deg, #1e293b, #4338ca); box-shadow: 0 12px 24px rgba(30, 41, 59, .14); }
+.provider-balance-card .eyebrow { color: #c7d2fe; }
+.provider-balance { margin-top: 6px; font-size: 32px; font-weight: 800; }
+.provider-balance-card p { max-width: 470px; margin: 4px 0 0; color: #cbd5e1; font-size: 12px; line-height: 1.5; }
+.provider-topup-form { width: min(100%, 350px); }
+.provider-topup-form label { display: block; margin-bottom: 7px; color: #e2e8f0; font-size: 13px; font-weight: 700; }
+.provider-topup-form > div { display: flex; gap: 8px; }
+.provider-topup-form input { min-width: 0; padding: 10px; border-color: #cbd5e1; }
+.provider-topup-form .card-primary-action { white-space: nowrap; color: #fff; background: #10b981; }
+.provider-topup-form .card-primary-action:hover { background: #059669; }
+.provider-paid-badge { padding: 8px 12px; border-radius: 20px; color: #047857; background: #d1fae5; font-size: 13px; font-weight: 700; }
+.card-form-divider { margin: 16px 0 0; color: #94a3b8; text-align: center; font-size: 12px; }
+.card-primary-action[disabled] { opacity: .6; cursor: not-allowed; }
+.transaction-row .card-secondary-action { min-height: 30px; padding: 6px 9px; font-size: 11px; }
+.course-module-paywalled { border-color: #e2e8f0; background: #f8fafc; }
+.course-module-paywalled .module-progress { color: #854d0e; font-weight: 700; }
+.course-module-paywalled:hover { border-color: #fbbf24; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+@media (max-width: 640px) {
+  .card-page { margin-top: 22px; padding: 0 12px; }
+  .card-page-heading, .wallet-section-heading { align-items: start; flex-direction: column; }
+  .card-page-heading .card-primary-action, .wallet-section-heading .card-secondary-action { width: 100%; }
+  .card-form-panel, .demo-receipt { padding: 22px; }
+  .demo-card-grid { grid-template-columns: 1fr; }
+  .transaction-row { gap: 8px; padding: 11px 9px; }
+  .transaction-description strong, .transaction-amount { font-size: 11px; }
+  .provider-balance-card { align-items: stretch; flex-direction: column; padding: 20px; }
+  .provider-topup-form { width: 100%; }
+}
+@media print {
+  body { background: #fff; }
+  nav, .no-print, .card-back { display: none !important; }
+  .card-page { margin: 0 auto; padding: 0; }
+  .demo-receipt { box-shadow: none; }
+}
+.wallet-card-grid, .course-catalog-grid, .wallet-action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 18px;
+}
+.wallet-virtual-card {
+  display: flex;
+  min-height: 190px;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 22px;
+  border-radius: 16px;
+  color: #fff;
+  background: linear-gradient(130deg, #1d4ed8, #2563eb 58%, #0ea5e9);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, .2);
+}
+.wallet-virtual-card-top, .wallet-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.wallet-virtual-card-top { color: #dbeafe; font-size: 13px; font-weight: 800; }
+.wallet-chip { width: 31px; height: 23px; border: 1px solid rgba(255,255,255,.7); border-radius: 5px; background: linear-gradient(135deg, rgba(255,255,255,.6), rgba(255,255,255,.15)); }
+.wallet-card-number { font-family: Consolas, monospace; font-size: 18px; letter-spacing: 1.2px; }
+.wallet-card-bottom { color: #dbeafe; font-size: 10px; }
+.wallet-card-bottom strong { color: #fff; font-size: 19px; }
+.wallet-action-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.wallet-action-grid .card-form-panel h2 { margin: 7px 0; }
+.wallet-action-grid .balance-form input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 7px; font: inherit; }
+.course-catalog-card { display: flex; flex-direction: column; align-items: flex-start; }
+.course-catalog-card .checkout-summary { width: 100%; box-sizing: border-box; }
+.course-catalog-card .card-primary-action, .course-catalog-card .card-secondary-action { margin-top: auto; }
+.checkout-card-options { display: grid; gap: 9px; margin: 0; padding: 0; border: 0; }
+.checkout-card-options legend { margin-bottom: 9px; font-size: 13px; font-weight: 700; }
+.checkout-card-option { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1px solid #dbe2ef; border-radius: 8px; cursor: pointer; }
+.checkout-card-option input { margin: 0; }
+.checkout-card-option strong { margin-left: auto; }
+.receipt-details { margin: 18px 0 24px; }
+.receipt-details > div { display: flex; justify-content: space-between; gap: 15px; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
+.receipt-details dt { color: #64748b; font-size: 13px; }
+.receipt-details dd { margin: 0; text-align: right; overflow-wrap: anywhere; font-size: 13px; }
+.receipt-panel .card-primary-action { width: 100%; box-sizing: border-box; }
+.topup-verification-panel h1 { margin-top: 8px; }
+.topup-code-notice { display: grid; gap: 7px; margin: 20px 0 12px; padding: 16px; border: 1px solid #bfdbfe; border-radius: 10px; background: #eff6ff; }
+.topup-code-notice strong { color: #1e3a8a; font-size: 13px; }
+.topup-code-notice code { color: #1d4ed8; font-family: Consolas, monospace; font-size: 28px; font-weight: 800; letter-spacing: 5px; }
+.topup-code-notice span, .topup-notification-status { color: #64748b; font-size: 12px; }
+.notification-permission-button { width: 100%; box-sizing: border-box; }
+.topup-notification-status { min-height: 18px; margin: 9px 0; }
+.topup-verification-panel .flash { margin: 14px 0; }
+.topup-verification-panel .balance-form input { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #cbd5e1; border-radius: 7px; font: inherit; letter-spacing: 3px; }
+.topup-resend { display: grid; justify-items: center; gap: 8px; margin-top: 18px; }
+.topup-resend span { min-height: 18px; color: #64748b; font-size: 12px; text-align: center; }
+.topup-resend #resend-error { color: #b91c1c; }
+@media (max-width: 640px) {
+  .wallet-card-number { font-size: 15px; }
+  .transaction-row { flex-wrap: wrap; }
+  .transaction-row .card-secondary-action { margin-left: 46px; }
+  .receipt-details > div { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .receipt-details dd { text-align: left; }
+}

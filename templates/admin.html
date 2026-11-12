@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>⚙️ Панель администратора</h1>
+<div class="card">
+  <h3>Добавить новый урок</h3>
+  <form method="post" style="display: flex; flex-direction: column; gap: 10px;">
+    <label>Модуль:</label>
+    <select name="module_id" required>
+      {% for m in modules %}
+        <option value="{{ m['id'] }}">{{ m['title'] }}</option>
+      {% endfor %}
+    </select>
+    
+    <label>Тип шага:</label>
+    <select name="step_type" required>
+      <option value="theory">📖 Лекция</option>
+      <option value="practice">💻 Практика</option>
+      <option value="quiz">📝 Тест</option>
+    </select>
+    
+    <label>Название:</label>
+    <input name="title" placeholder="Название урока" required>
+    
+    <label>Текст лекции (Markdown, для теории):</label>
+    <textarea name="content" placeholder="Текст лекции..." style="height: 100px;"></textarea>
+    
+    <label>Задание или вопрос (для практики/теста):</label>
+    <textarea name="task" placeholder="Что нужно сделать или на какой вопрос ответить?" style="height: 60px;"></textarea>
+    
+    <label>Критерии проверки практики (regex, по одному на строку):</label>
+    <textarea name="validation_rules" placeholder="Например:&#10;def\s+greet\s*\(" style="height: 80px;"></textarea>
+
+    <label>Варианты ответа для теста (по одному на строку):</label>
+    <textarea name="quiz_options" placeholder="Первый вариант&#10;Второй вариант" style="height: 65px;"></textarea>
+
+    <label>Номер правильного варианта (начиная с 0):</label>
+    <input name="quiz_answer" type="number" min="0" placeholder="0">
+    
+    <label>Подсказка:</label>
+    <input name="hint" placeholder="Подсказка для студента">
+    
+    <label>Награда (XP):</label>
+    <input name="xp_reward" type="number" value="10" placeholder="10">
+    
+    <button type="submit" style="margin-top: 15px;">Создать урок</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,6 @@
+Flask
+Flask-Login
+SQLAlchemy>=2.0,<3.0
+Markdown
+Pygments
+reportlab

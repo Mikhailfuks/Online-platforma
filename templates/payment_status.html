@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Статус платежа — PyAcademy{% endblock %}
+{% block page_styles %}<link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">{% endblock %}
+{% block content %}
+<main class="card-page narrow-card-page">
+  <section class="card-form-panel checkout-complete">
+    {% if payment['status'] == 'succeeded' %}
+      <span class="checkout-icon">✓</span>
+      <span class="eyebrow">Операция завершена</span>
+      <h1>Оплачено</h1>
+      {% if payment['purpose'] == 'course' %}
+        <p>Доступ ко всему курсу открыт с внутреннего баланса.</p>
+        <a href="{{ url_for('payment_receipt_pdf', order_id=payment['id']) }}" class="card-primary-action">Скачать PDF-документ</a>
+      {% else %}
+        <p>Средства зачислены на внутренний баланс.</p>
+        <a href="{{ url_for('wallet') }}" class="card-primary-action">Открыть баланс</a>
+      {% endif %}
+    {% elif payment['status'] == 'canceled' or payment['status'] == 'failed' %}
+      <span class="eyebrow">Операция не завершена</span>
+      <h1>Доступ не оформлен</h1>
+      <p>Можно вернуться и повторить оформление.</p>
+      <a href="{{ url_for('checkout') if payment['purpose'] == 'course' else url_for('wallet') }}" class="card-primary-action">Попробовать ещё раз</a>
+    {% else %}
+      <span class="eyebrow">Операция обрабатывается</span>
+      <h1>Ожидание завершения</h1>
+      <p>Проверьте статус операции позднее.</p>
+      <a href="{{ url_for('checkout') if payment['purpose'] == 'course' else url_for('wallet') }}" class="card-primary-action">Вернуться</a>
+    {% endif %}
+    <a href="{{ url_for('wallet') }}" class="card-subtle-link">Перейти к платежам</a>
+  </section>
+</main>
+{% endblock %}

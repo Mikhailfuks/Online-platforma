@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block title %}Подтверждение пополнения — PyAcademy{% endblock %}
+{% block page_styles %}<link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">{% endblock %}
+{% block content %}
+<main class="card-page narrow-card-page">
+  <a class="card-back" href="{{ url_for('wallet') }}">← В кошелёк</a>
+  <section
+    class="card-form-panel topup-verification-panel"
+    id="topup-verification"
+    data-challenge-id="{{ challenge.id }}"
+    data-resend-url="{{ url_for('resend_top_up_code', challenge_id=challenge.id) }}"
+    data-seconds-left="{{ seconds_until_resend }}"
+    data-initial-code="{{ initial_code or '' }}"
+  >
+    <span class="eyebrow">Подтверждение операции</span>
+    <h1>Подтвердите пополнение</h1>
+    <p>
+      Введите 6-значный код, чтобы зачислить
+      <strong>{{ "{:,.2f}".format(challenge.amount).replace(",", " ") }} ₽</strong>
+      на выбранную карту.
+    </p>
+
+    <div class="topup-code-notice" role="status" aria-live="polite">
+      <strong>Код подтверждения</strong>
+      <code id="topup-current-code">{{ initial_code or "Откройте системное уведомление" }}</code>
+      <span>Код действует 10 минут. Никому его не сообщайте.</span>
+    </div>
+
+    <button type="button" class="card-secondary-action notification-permission-button" id="enable-notifications">
+      Включить системные уведомления
+    </button>
+    <p class="topup-notification-status" id="notification-status" aria-live="polite">
+      Если системные уведомления запрещены, используйте код, показанный выше.
+    </p>
+
+    {% if error_message %}
+      <div class="flash error" role="alert">{{ error_message }}</div>
+    {% endif %}
+
+    <form method="post" action="{{ url_for('verify_top_up', challenge_id=challenge.id) }}" class="balance-form">
+      <label for="topup-confirmation-code">Код из уведомления</label>
+      <input
+        id="topup-confirmation-code"
+        type="text"
+        name="code"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+        pattern="[0-9]{6}"
+        minlength="6"
+        maxlength="6"
+        placeholder="000000"
+        required
+      >
+      <button type="submit" class="card-primary-action">Подтвердить пополнение</button>
+    </form>
+
+    <div class="topup-resend">
+      <button type="button" class="card-secondary-action" id="resend-code" disabled>
+        Запросить новый код
+      </button>
+      <span id="resend-countdown" aria-live="polite"></span>
+      <span id="resend-error" role="alert"></span>
+    </div>
+  </section>
+</main>
+<script>
+  (() => {
+    const panel = document.getElementById("topup-verification");
+    const codeOutput = document.getElementById("topup-current-code");
+    const resendButton = document.getElementById("resend-code");
+    const countdown = document.getElementById("resend-countdown");
+    const resendError = document.getElementById("resend-error");
+    const enableNotifications = document.getElementById("enable-notifications");
+    const notificationStatus = document.getElementById("notification-status");
+    let remaining = Number(panel.dataset.secondsLeft) || 0;
+    let timerId;
+
+    const notifyCode = (code) => {
+      if (!("Notification" in window)) {
+        notificationStatus.textContent = "Браузер не поддерживает системные уведомления. Код отображён на странице.";
+        return;
+      }
+      if (Notification.permission === "granted") {
+        try {
+          new Notification("Подтверждение пополнения", {
+            body: `Ваш код: ${code}`,
+            tag: "top-up-confirmation"
+          });
+        } catch (error) {
+          notificationStatus.textContent = "Не удалось показать системное уведомление. Используйте код на странице.";
+          console.warn("Browser notification could not be displayed.", error);
+        }
+      } else if (Notification.permission === "denied") {
+        notificationStatus.textContent = "Системные уведомления заблокированы. Используйте код, отображённый на странице.";
+      }
+    };
+
+    const startCountdown = (seconds) => {
+      window.clearInterval(timerId);
+      remaining = Math.max(0, seconds);
+      const render = () => {
+        resendButton.disabled = remaining > 0;
+        countdown.textContent = remaining > 0
+          ? `Повторный запрос через ${remaining} сек.`
+          : "Новый код можно запросить.";
+        if (remaining > 0) remaining -= 1;
+        else window.clearInterval(timerId);
+      };
+      render();
+      timerId = window.setInterval(render, 1000);
+    };
+
+    const initialCode = panel.dataset.initialCode;
+    if (initialCode) notifyCode(initialCode);
+    startCountdown(remaining);
+
+    enableNotifications.addEventListener("click", async () => {
+      if (!("Notification" in window)) {
+        notificationStatus.textContent = "Браузер не поддерживает системные уведомления. Используйте код на странице.";
+        return;
+      }
+      const permission = Notification.permission === "default"
+        ? await Notification.requestPermission()
+        : Notification.permission;
+      if (permission === "granted") {
+        notificationStatus.textContent = "Системные уведомления включены.";
+        const code = codeOutput.textContent.trim();
+        if (/^\d{6}$/.test(code)) notifyCode(code);
+      } else {
+        notificationStatus.textContent = "Разрешение не предоставлено. Код остаётся доступен на странице.";
+      }
+    });
+
+    resendButton.addEventListener("click", async () => {
+      resendError.textContent = "";
+      resendButton.disabled = true;
+      try {
+        const response = await fetch(panel.dataset.resendUrl, {
+          method: "POST",
+          headers: { "Accept": "application/json" }
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          resendError.textContent = result.error || "Не удалось получить новый код.";
+          if (result.retry_after) startCountdown(result.retry_after);
+          else resendButton.disabled = false;
+          return;
+        }
+        codeOutput.textContent = result.code;
+        panel.dataset.initialCode = result.code;
+        notifyCode(result.code);
+        startCountdown(result.retry_after);
+      } catch {
+        resendError.textContent = "Ошибка соединения. Повторите запрос.";
+        resendButton.disabled = false;
+      }
+    });
+  })();
+</script>
+{% endblock %}

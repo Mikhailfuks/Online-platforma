@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Квитанция операции — PyAcademy{% endblock %}
+{% block page_styles %}<link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">{% endblock %}
+{% block content %}
+<main class="card-page narrow-card-page">
+  <a class="card-back" href="{{ url_for('wallet') }}">← В кошелёк</a>
+  <section class="card-form-panel receipt-panel">
+    <span class="eyebrow">Квитанция операции №{{ receipt.id }}</span>
+    <h1>{% if receipt.kind == "course" %}Покупка курса{% else %}Пополнение карты{% endif %}</h1>
+    <dl class="receipt-details">
+      <div><dt>Дата</dt><dd>{{ receipt.created_at.strftime("%d.%m.%Y %H:%M") }}</dd></div>
+      <div><dt>Пользователь</dt><dd>{{ current_user.username }}</dd></div>
+      <div><dt>Описание</dt><dd>{{ receipt.description }}</dd></div>
+      <div><dt>Статус</dt><dd>{% if receipt.kind == "course" %}Оплачено{% else %}Зачислено{% endif %}</dd></div>
+      <div><dt>Сумма</dt><dd>{{ "{:,.2f}".format(receipt.amount).replace(",", " ") }} ₽</dd></div>
+    </dl>
+    <a href="{{ url_for('download_receipt', receipt_id=receipt.id) }}" class="card-primary-action">Скачать PDF-квитанцию</a>
+  </section>
+</main>
+{% endblock %}

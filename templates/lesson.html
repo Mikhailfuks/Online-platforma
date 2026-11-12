@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="lesson-layout">
+  <aside class="course-sidebar" aria-label="Программа курса">
+    <div class="sidebar-heading">
+      <a href="{{ url_for('index') }}#course" class="sidebar-back">← Мои курсы</a>
+      <h2>Python с нуля</h2>
+      <p>15 модулей · 105 шагов</p>
+    </div>
+    <nav class="course-sidebar-nav">
+      {% for module in course_modules %}
+        <section class="sidebar-module">
+          <h3>{{ module['title'] }}</h3>
+          {% set practice_count = namespace(value=0) %}
+          {% for item in module['lessons'] %}
+            {% if item['step_type'] == 'practice' %}{% set practice_count.value = practice_count.value + 1 %}{% endif %}
+            {% set item_label = 'Теория' if item['step_type'] == 'theory' else ('Практика ' ~ practice_count.value if item['step_type'] == 'practice' else item['title']) %}
+            {% if item['is_locked'] %}
+              <span class="sidebar-item sidebar-locked" aria-disabled="true">
+                <span class="sidebar-status">□</span><span>{{ item_label }}</span>
+              </span>
+            {% else %}
+              <a href="{{ url_for('lesson', slug=item['slug']) }}" class="sidebar-item {% if item['is_active'] %}sidebar-active{% endif %} {% if item['is_completed'] %}sidebar-completed{% endif %}">
+                <span class="sidebar-status">{% if item['is_completed'] %}✓{% elif item['step_type'] == 'theory' %}□{% elif item['step_type'] == 'practice' %}▣{% else %}▤{% endif %}</span>
+                <span>{{ item_label }}</span>
+              </a>
+            {% endif %}
+          {% endfor %}
+        </section>
+      {% endfor %}
+    </nav>
+  </aside>
+
+  <main class="lesson-main">
+<div class="lesson-header">
+  <a href="{{ url_for('index') }}" class="back-link">← Назад к программе</a>
+  <h1>{{ lesson['title'] }}</h1>
+  <span class="step-badge">
+    {% if lesson['step_type'] == 'theory' %}📖 Лекция
+    {% elif lesson['step_type'] == 'practice' %}💻 Практика
+    {% else %}📝 Тест{% endif %}
+  </span>
+</div>
+
+<div class="lesson-body card">
+  
+  {% if lesson['step_type'] == 'theory' %}
+    <div class="markdown-body">
+      {{ lesson['content_html'] | safe }}
+    </div>
+    <div class="step-actions">
+      <button id="complete-theory-btn" data-slug="{{ lesson['slug'] }}">Далее →</button>
+    </div>
+  {% endif %}
+
+  {% if lesson['step_type'] == 'practice' %}
+    <p class="task-text">{{ lesson['task'] }}</p>
+    <div class="editor-container">
+      <textarea id="code-editor"></textarea>
+    </div>
+    <div class="practice-footer">
+      <button id="check-practice-btn" data-slug="{{ lesson['slug'] }}">Отправить</button>
+      <span id="attempts-counter" class="text-muted">Попыток: {{ lesson['attempts'] }}</span>
+    </div>
+  {% endif %}
+
+  {% if lesson['step_type'] == 'quiz' %}
+    <p class="task-text">{{ lesson['task'] }}</p>
+    <form id="quiz-form" data-slug="{{ lesson['slug'] }}">
+      {% for option in lesson['quiz_options'] %}
+        <label class="quiz-option">
+          <input type="radio" name="quiz" value="{{ loop.index0 }}" required>
+          {{ option }}
+        </label>
+      {% endfor %}
+    </form>
+    <div class="step-actions">
+      <button id="check-quiz-btn" data-slug="{{ lesson['slug'] }}">Ответить</button>
+    </div>
+  {% endif %}
+
+  <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
+  <div id="error-box" style="display: none; margin-top: 10px; color: #dc3545; font-family: monospace; background: #fff5f5; padding: 10px; border-radius: 6px; border: 1px solid #fecaca;"></div>
+  <div id="hint-box" class="hint-box" style="display: none;"></div>
+
+  <div class="lesson-nav">
+    {% if prev %}
+      <a href="{{ url_for('lesson', slug=prev['slug']) }}" class="btn-outline">← Назад</a>
+    {% else %}
+      <div></div>
+    {% endif %}
+    
+    <a href="{% if next %}{{ url_for('lesson', slug=next['slug']) }}{% else %}{{ url_for('index') }}{% endif %}" 
+       id="next-btn" class="btn-primary" style="display: {% if lesson['is_completed'] or lesson['step_type'] == 'theory' %}inline-block{% else %}none{% endif %};">
+       {% if next %}Далее →{% else %}Завершить{% endif %}
+    </a>
+  </div>
+</div>
+
+<!-- БЛОК КОММЕНТАРИЕВ -->
+<div class="card comments-section">
+  <h3>💬 Обсуждение</h3>
+  
+  <div id="comments-list">
+    {% for c in comments %}
+      <article class="comment">
+        <div class="comment-header">
+          <b>{{ c['username'] }}</b>
+          <span class="text-muted" style="font-size: 12px;">{{ c['created_at'][:16] }}</span>
+        </div>
+        <p style="margin: 5px 0 0 0;">{{ c['text'] }}</p>
+      </article>
+    {% else %}
+      <p class="text-muted">Пока нет комментариев. Будьте первым!</p>
+    {% endfor %}
+  </div>
+
+  <div class="comment-form">
+    <textarea id="comment-input" placeholder="Задайте вопрос по уроку..."></textarea>
+    <button id="submit-comment-btn" data-lesson-id="{{ lesson['id'] }}" style="margin-top: 10px;">Отправить</button>
+    <p id="comment-error" class="comment-error" role="status" aria-live="polite"></p>
+  </div>
+</div>
+  </main>
+</div>
+{% endblock %}

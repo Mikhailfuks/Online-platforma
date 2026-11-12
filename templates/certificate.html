@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="text-align: center; padding: 50px; border: 8px solid var(--primary); background: #fffdf5;">
+  <h1 style="font-size: 40px; color: var(--primary); margin-bottom: 10px;">СЕРТИФИКАТ</h1>
+  <p style="font-size: 18px; color: #64748b; letter-spacing: 2px;">ОБ ОКОНЧАНИИ КУРСА</p>
+  
+  <div style="margin: 40px 0;">
+    <p style="font-size: 16px;">Настоящий сертификат выдан</p>
+    <h2 style="font-size: 32px; margin: 10px 0; border-bottom: 2px solid #ccc; display: inline-block; padding: 0 20px 10px;">{{ current_user.username }}</h2>
+    <p style="font-size: 16px; margin-top: 20px;">за успешное прохождение курса<br><b>«Python для начинающих»</b></p>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; margin-top: 50px; font-size: 14px;">
+    <div>Дата: <b>{{ date }}</b></div>
+    <div>Опыт: <b>{{ current_user.xp }} XP</b></div>
+  </div>
+</div>
+
+<div style="text-align: center; margin-top: 20px;">
+  <button onclick="window.print()">🖨️ Распечатать / Сохранить PDF</button>
+</div>
+{% endblock %}

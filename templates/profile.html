@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Личный кабинет</h1>
+
+<div class="profile-grid">
+  <div class="card profile-card">
+    <div class="avatar">{{ current_user.username[0]|upper }}</div>
+    <h2>{{ current_user.username }}</h2>
+    <p class="text-muted">Дата регистрации: {{ reg_date }}</p>
+    
+    <div class="achievements-block">
+      <h4>Достижения</h4>
+      <div class="badges">
+        {% for a in achievements %}
+          <div class="badge" title="{{ a['title'] }}">{{ a['icon'] }}</div>
+        {% else %}
+          <p class="text-muted" style="font-size: 14px;">Пока нет достижений.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="card stats-card">
+    <h3>Статистика</h3>
+    <a href="{{ url_for('wallet') }}" class="btn-primary" style="display:block; text-align:center; margin: 12px 0 18px;">Баланс и платежи</a>
+    <div class="stat-row">
+      <span>Общий опыт (XP):</span>
+      <b style="color: var(--primary);">{{ current_user.xp }} XP</b>
+    </div>
+    <div class="stat-row">
+      <span>Пройдено шагов:</span>
+      <b>{{ solved }}</b>
+    </div>
+    <div class="stat-row">
+      <span>Всего попыток:</span>
+      <b>{{ attempts }}</b>
+    </div>
+    <br>
+    <form method="post" action="{{ url_for('reset_progress') }}" onsubmit="return confirm('Сбросить весь прогресс и XP? Это действие нельзя отменить.');">
+      <button type="submit" class="reset-progress">Сбросить прогресс</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Песочница Python — PyAcademy{% endblock %}
+{% block content %}
+<div class="sandbox-actions">
+  <div>
+    <span class="eyebrow">Практика без установки</span>
+    <h1 style="margin: 4px 0;">Python-песочница 🐍</h1>
+    <p class="sandbox-note">Код выполняется в вашем браузере и не отправляется на сервер. Запуск может занять несколько секунд.</p>
+  </div>
+  <button id="run-sandbox" type="button">▶ Запустить</button>
+</div>
+<div class="sandbox-grid">
+  <section class="sandbox-panel">
+    <h2>main.py</h2>
+    <textarea id="sandbox-code" spellcheck="false"># Попробуйте изменить код
+for number in range(1, 4):
+    print("Шаг", number)
+</textarea>
+  </section>
+  <section class="sandbox-panel">
+    <h2 id="sandbox-status">Вывод программы</h2>
+    <pre id="sandbox-output" class="sandbox-output" aria-live="polite">Нажмите «Запустить», чтобы выполнить код.</pre>
+  </section>
+</div>
+<script src="{{ url_for('static', filename='js/sandbox.js') }}" defer></script>
+{% endblock %}

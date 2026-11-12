@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Операция баланса — PyAcademy{% endblock %}
+{% block content %}
+<main class="card-page narrow-card-page">
+  <section class="card-form-panel">
+    <span class="eyebrow">Внутренний баланс</span>
+    <h1>Операция №{{ note.id }}</h1>
+    <dl class="operation-note-details">
+      <dt>Дата</dt>
+      <dd>{{ note.created_at.strftime("%d.%m.%Y %H:%M") }}</dd>
+      <dt>Пользователь</dt>
+      <dd>{{ current_user.username }}</dd>
+      <dt>Тип операции</dt>
+      <dd>{{ "Пополнение" if note.kind == "credit" else "Оплачено" }}</dd>
+      <dt>Описание</dt>
+      <dd>{{ note.description }}</dd>
+      <dt>Сумма</dt>
+      <dd>{{ "{:,.2f}".format(note.amount).replace(",", " ") }} ₽</dd>
+    </dl>
+    <p><strong>Итого к оплате:</strong> {{ "{:,.2f}".format(note.amount).replace(",", " ") }} ₽</p>
+    <a class="card-primary-action" href="{{ url_for('download_operation_note', note_id=note.id) }}">Скачать PDF</a>
+    <a class="card-subtle-link" href="{{ url_for('wallet') }}">Вернуться к балансу</a>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>🏆 Таблица лидеров</h1>
+<div class="card">
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr style="border-bottom: 2px solid #e2e8f0; text-align: left;">
+        <th style="padding: 10px;">Место</th>
+        <th style="padding: 10px;">Пользователь</th>
+        <th style="padding: 10px; text-align: right;">Опыт (XP)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in leaders %}
+      <tr style="border-bottom: 1px solid #e2e8f0;">
+        <td style="padding: 10px; font-weight: bold; color: {% if loop.index == 1 %}#f59e0b{% elif loop.index == 2 %}#94a3b8{% elif loop.index == 3 %}#b45309{% else %}#64748b{% endif %};">
+          {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3 %}🥉{% else %}{{ loop.index }}{% endif %}
+        </td>
+        <td style="padding: 10px;">{{ user['username'] }}</td>
+        <td style="padding: 10px; text-align: right; font-weight: bold; color: var(--primary);">{{ user['xp'] }} XP</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
